@@ -57,8 +57,8 @@ class Call(object):
 		self.args = args
 
 	def __str__(self):
-		return "Call(" + str(self.fun) + " , {" + (reduce(lambda x, y: x+y, \
-			((str(x) + ", ") for x in self.args)))[:-2] + "})"
+		return "Call(" + str(self.fun) + " , {" + \
+			reduce(lambda x, y: x + ", " + y, (str(x) for x in self.args)) + "})"
 		
 
 def tokenize(str):
