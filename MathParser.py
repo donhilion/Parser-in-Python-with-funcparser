@@ -65,7 +65,6 @@ def tokenize(str):
 	"""Returns tokens of the given string."""
 	specs = [
 		('Space',  (r'[ \t\r\n]+',)),
-#		('String', (ur'"(%(unescaped)s | %(escaped)s)*"' % regexps, VERBOSE)),
 		('Number', (r'''
 			(0|([1-9][0-9]*))   # Int
 			''', VERBOSE)),
