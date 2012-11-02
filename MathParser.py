@@ -86,7 +86,6 @@ def parse(seq):
 	op = lambda s: a(Token('Op', s)) >> tokval # return the value if token is Op
 	op_ = lambda s: skip(op(s)) # checks if token is Op and ignores it
 	toktype = lambda t: some(lambda x: x.type == t) >> tokval # checks type of token
-	#lst = lambda head, tail: (head,) + tail
 	def lst(h,t):
 		return [h,] + t
 	call = lambda x: Call(x[0], x[1])
@@ -107,15 +106,14 @@ def parse(seq):
 	add_op = add | sub
 
 	factor = with_forward_decls(lambda:
-		number | op_('(') + exp + op_(')'))
+		number | op_('(') + exp + op_(')') | call)
 	term = factor + many(mul_op + factor) >> unarg(eval_expr)
-	math = term + many(add_op + term) >> unarg(eval_expr)
+	exp = term + many(add_op + term) >> unarg(eval_expr)
 	exp_lst = with_forward_decls(lambda:
 		exp + many(op_(',') + exp) >> unarg(lst))
 	call = toktype('Name') + op_('(') + exp_lst + op_(')') >> call
-	exp = math | call
 
 	return exp.parse(seq)
 
-print(str(parse(tokenize("42-5*(3+12)"))))
+print(str(parse(tokenize("42-5*(3+12+23)"))))
 print(str(parse(tokenize("g(42-21,f(5))"))))
