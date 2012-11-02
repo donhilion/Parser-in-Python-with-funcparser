@@ -116,4 +116,4 @@ def parse(seq):
 	return exp.parse(seq)
 
 print(str(parse(tokenize("42-5*(3+12+23)"))))
-print(str(parse(tokenize("g(42-21,f(5))"))))
+print(str(parse(tokenize("g(42-21,f(5),h())"))))
