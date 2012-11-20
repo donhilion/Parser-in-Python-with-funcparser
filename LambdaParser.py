@@ -56,14 +56,13 @@ def parse(seq):
 	paren = lambda s: a(Token('Parentheses', s)) >> tokval # return the value if token is Op
 	paren_ = lambda s: skip(paren(s)) # checks if token is Op and ignores it
 
-	abstraction = lambda x: Abstraction(x[0], x[1])
 	def application(z, list):
 		return reduce(lambda s, x: Application(s, x), list, z)
 	
 	variable = toktype('Name') >> Variable
 	term = variable | with_forward_decls(lambda: paren_('(') + exp + paren_(')')) | \
 		with_forward_decls(lambda: skip(toktype('Lambda')) + toktype('Name') + \
-			skip(toktype('Dot')) + exp >> abstraction)
+			skip(toktype('Dot')) + exp >> unarg(Abstraction))
 
 	exp = term + many(term) >> unarg(application)
 
